@@ -5,7 +5,7 @@ npm i selenium-webdriver
 ```
 
 ```sh
-./run drive.js <benchmark>
+./run.sh <benchmark>
 ```
 where benchmark is either *speedometer* or *jetstream*
 
