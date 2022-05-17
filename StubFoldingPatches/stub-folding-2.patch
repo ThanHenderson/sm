@@ -1,0 +1,445 @@
+# HG changeset patch
+# User Iain Ireland <iireland@mozilla.com>
+# Date 1649107448 25200
+#      Mon Apr 04 14:24:08 2022 -0700
+# Node ID a18c58c7c15fe440caf0571b1fa6611fbea25ac3
+# Parent  3fbddb1c72bc3cd4bd9650697b8a82c3fe278804
+Bug 1671228: Part 2: Implement TryFoldingStubs
+
+diff --git a/js/src/jit/BaselineCacheIRCompiler.cpp b/js/src/jit/BaselineCacheIRCompiler.cpp
+--- a/js/src/jit/BaselineCacheIRCompiler.cpp
++++ b/js/src/jit/BaselineCacheIRCompiler.cpp
+@@ -2,16 +2,17 @@
+  * vim: set ts=8 sts=2 et sw=2 tw=80:
+  * This Source Code Form is subject to the terms of the Mozilla Public
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ 
+ #include "jit/BaselineCacheIRCompiler.h"
+ 
+ #include "jit/CacheIR.h"
++#include "jit/CacheIRCloner.h"
+ #include "jit/CacheIRWriter.h"
+ #include "jit/JitFrames.h"
+ #include "jit/JitRuntime.h"
+ #include "jit/JitZone.h"
+ #include "jit/Linker.h"
+ #include "jit/SharedICHelpers.h"
+ #include "jit/VMFunctions.h"
+ #include "js/experimental/JitInfo.h"  // JSJitInfo
+@@ -20,16 +21,17 @@
+ #include "proxy/Proxy.h"
+ #include "util/Unicode.h"
+ #include "vm/JSAtom.h"
+ #include "vm/StaticStrings.h"
+ 
+ #include "jit/MacroAssembler-inl.h"
+ #include "jit/SharedICHelpers-inl.h"
+ #include "jit/VMFunctionList-inl.h"
++#include "vm/List-inl.h"
+ 
+ using namespace js;
+ using namespace js::jit;
+ 
+ using mozilla::Maybe;
+ 
+ using JS::ExpandoAndGeneration;
+ 
+@@ -2057,16 +2059,180 @@ static void ResetEnteredCounts(const ICE
+ static ICStubSpace* StubSpaceForStub(bool makesGCCalls, JSScript* script,
+                                      ICScript* icScript) {
+   if (makesGCCalls) {
+     return icScript->jitScriptStubSpace();
+   }
+   return script->zone()->jitZone()->optimizedStubSpace();
+ }
+ 
++bool js::jit::TryFoldingStubs(JSContext* cx, ICFallbackStub* fallback,
++                              JSScript* script, ICScript* icScript) {
++  ICEntry* icEntry = icScript->icEntryForStub(fallback);
++  ICStub* entryStub = icEntry->firstStub();
++
++  // Don't fold unless there are at least two stubs.
++  if (entryStub == fallback) {
++    return true;
++  }
++  ICCacheIRStub* firstStub = entryStub->toCacheIRStub();
++  if (firstStub->next()->isFallback()) {
++    return true;
++  }
++
++  const uint8_t* firstStubData = firstStub->stubDataStart();
++  const CacheIRStubInfo* stubInfo = firstStub->stubInfo();
++
++  // Check to see if:
++  //   a) all of the stubs in this chain have the exact same code.
++  //   b) all of the stubs have the same stub field data, except
++  //      for a single GuardShape where they differ.
++  //   c) at least one stub after the first has a non-zero entry count.
++  //
++  // If all of these conditions hold, then we generate a single stub
++  // that covers all the existing cases by replacing GuardShape with
++  // GuardMultipleShapes.
++
++  uint32_t numActive = 0;
++  Maybe<uint32_t> foldableFieldOffset;
++  RootedValue shape(cx);
++  Rooted<ListObject*> shapeList(cx);
++
++  {
++    // To prevent stubs from being discarded while we're looking at them,
++    // we suppress GC long enough to allocate the list of shapes and ensure
++    // it has enough space to add shapes without triggering GC later. If
++    // we can't allocate the list without GC, we just skip this optimization.
++    gc::AutoSuppressGC suppress(cx);
++    shapeList = ListObject::create(cx);
++    if (!shapeList ||
++        !shapeList->ensureElements(cx, fallback->numOptimizedStubs())) {
++      cx->recoverFromOutOfMemory();
++      return true;
++    }
++  }
++
++  auto addShape = [&cx, &shape, &shapeList](uintptr_t rawShape) {
++    shape = PrivateGCThingValue(reinterpret_cast<Shape*>(rawShape));
++    MOZ_ALWAYS_TRUE(shapeList->append(cx, shape));
++  };
++
++  for (ICCacheIRStub* other = firstStub->nextCacheIR(); other;
++       other = other->nextCacheIR()) {
++    // Verify that the stubs share the same code.
++    if (other->stubInfo() != stubInfo) {
++      return true;
++    }
++    const uint8_t* otherStubData = other->stubDataStart();
++
++    if (other->enteredCount() > 0) {
++      numActive++;
++    }
++
++    uint32_t fieldIndex = 0;
++    size_t offset = 0;
++    while (stubInfo->fieldType(fieldIndex) != StubField::Type::Limit) {
++      StubField::Type fieldType = stubInfo->fieldType(fieldIndex);
++
++      if (StubField::sizeIsWord(fieldType)) {
++        uintptr_t firstRaw = stubInfo->getStubRawWord(firstStubData, offset);
++        uintptr_t otherRaw = stubInfo->getStubRawWord(otherStubData, offset);
++
++        if (firstRaw != otherRaw) {
++          if (fieldType != StubField::Type::Shape) {
++            // Case 1: a field differs that is not a Shape. We only support
++            // folding GuardShape to GuardMultipleShapes.
++            return true;
++          }
++          if (foldableFieldOffset.isNothing()) {
++            // Case 2: this is the first field where the stub data differs.
++            foldableFieldOffset.emplace(offset);
++            addShape(firstRaw);
++            addShape(otherRaw);
++          } else if (*foldableFieldOffset == offset) {
++            // Case 3: this is the corresponding offset in a different stub.
++            addShape(otherRaw);
++          } else {
++            // Case 4: we have found more than one field that differs.
++            return true;
++          }
++        }
++      } else {
++        MOZ_ASSERT(StubField::sizeIsInt64(fieldType));
++
++        // We do not support folding any ops with int64-sized fields.
++        if (stubInfo->getStubRawInt64(firstStubData, offset) !=
++            stubInfo->getStubRawInt64(otherStubData, offset)) {
++          return true;
++        }
++      }
++
++      offset += StubField::sizeInBytes(fieldType);
++      fieldIndex++;
++    }
++
++    // We should never attach two completely identical stubs.
++    MOZ_ASSERT(foldableFieldOffset.isSome());
++  }
++
++  if (numActive == 0) {
++    return true;
++  }
++
++  // Clone the CacheIR, replacing GuardShape with GuardMultipleShapes.
++  CacheIRWriter writer(cx);
++  CacheIRReader reader(stubInfo);
++  CacheIRCloner cloner(firstStub);
++
++  // Initialize the operands.
++  CacheKind cacheKind = stubInfo->kind();
++  for (uint32_t i = 0; i < NumInputsForCacheKind(cacheKind); i++) {
++    writer.setInputOperandId(i);
++  }
++
++  bool success = false;
++  while (reader.more()) {
++    CacheOp op = reader.readOp();
++    switch (op) {
++      case CacheOp::GuardShape: {
++        ObjOperandId objId = reader.objOperandId();
++        uint32_t shapeOffset = reader.stubOffset();
++        if (shapeOffset == *foldableFieldOffset) {
++          writer.guardMultipleShapes(objId, shapeList);
++          success = true;
++        } else {
++          Shape* shape = stubInfo->getStubField<Shape*>(firstStub, shapeOffset);
++          writer.guardShape(objId, shape);
++        }
++        break;
++      }
++      default:
++        cloner.cloneOp(op, reader, writer);
++        break;
++    }
++  }
++  if (!success) {
++    // If the shape field that differed was not part of a GuardShape,
++    // we can't fold these stubs together.
++    return true;
++  }
++
++  // Replace the existing stubs with the new folded stub.
++  fallback->discardStubs(cx, icEntry);
++
++  ICAttachResult result = AttachBaselineCacheIRStub(cx, writer, cacheKind,
++                                                    script, icScript, fallback);
++  if (result == ICAttachResult::OOM) {
++    ReportOutOfMemory(cx);
++    return false;
++  }
++  MOZ_ASSERT(result == ICAttachResult::Attached);
++  return true;
++}
++
+ ICAttachResult js::jit::AttachBaselineCacheIRStub(
+     JSContext* cx, const CacheIRWriter& writer, CacheKind kind,
+     JSScript* outerScript, ICScript* icScript, ICFallbackStub* stub) {
+   // We shouldn't GC or report OOM (or any other exception) here.
+   AutoAssertNoPendingException aanpe(cx);
+   JS::AutoCheckCannotGC nogc;
+ 
+   if (writer.tooLarge()) {
+diff --git a/js/src/jit/BaselineCacheIRCompiler.h b/js/src/jit/BaselineCacheIRCompiler.h
+--- a/js/src/jit/BaselineCacheIRCompiler.h
++++ b/js/src/jit/BaselineCacheIRCompiler.h
+@@ -36,16 +36,19 @@ class MacroAssembler;
+ 
+ struct Address;
+ struct Register;
+ 
+ enum class TailCallVMFunctionId;
+ 
+ enum class ICAttachResult { Attached, DuplicateStub, TooLarge, OOM };
+ 
++bool TryFoldingStubs(JSContext* cx, ICFallbackStub* fallback, JSScript* script,
++                     ICScript* icScript);
++
+ ICAttachResult AttachBaselineCacheIRStub(JSContext* cx,
+                                          const CacheIRWriter& writer,
+                                          CacheKind kind, JSScript* outerScript,
+                                          ICScript* icScript,
+                                          ICFallbackStub* stub);
+ 
+ // BaselineCacheIRCompiler compiles CacheIR to BaselineIC native code.
+ class MOZ_RAII BaselineCacheIRCompiler : public CacheIRCompiler {
+diff --git a/js/src/jit/BaselineIC.h b/js/src/jit/BaselineIC.h
+--- a/js/src/jit/BaselineIC.h
++++ b/js/src/jit/BaselineIC.h
+@@ -263,16 +263,20 @@ class ICCacheIRStub final : public ICStu
+  public:
+   ICCacheIRStub(JitCode* stubCode, const CacheIRStubInfo* stubInfo)
+       : ICStub(stubCode->raw(), /* isFallback = */ false),
+         stubInfo_(stubInfo) {}
+ 
+   ICStub* next() const { return next_; }
+   void setNext(ICStub* stub) { next_ = stub; }
+ 
++  ICCacheIRStub* nextCacheIR() const {
++    return next_->isFallback() ? nullptr : next_->toCacheIRStub();
++  }
++
+   const CacheIRStubInfo* stubInfo() const { return stubInfo_; }
+   uint8_t* stubDataStart();
+ 
+   void trace(JSTracer* trc);
+ 
+   // Optimized stubs get purged on GC.  But some stubs can be active on the
+   // stack during GC - specifically the ones that can make calls.  To ensure
+   // that these do not get purged, all stubs that can make calls are allocated
+diff --git a/js/src/jit/CacheIR.cpp b/js/src/jit/CacheIR.cpp
+--- a/js/src/jit/CacheIR.cpp
++++ b/js/src/jit/CacheIR.cpp
+@@ -85,17 +85,16 @@ const CacheIROpInfo js::jit::CacheIROpIn
+ };
+ 
+ const uint32_t js::jit::CacheIROpHealth[] = {
+ #define OPHEALTH(op, len, transpile, health) health,
+     CACHE_IR_OPS(OPHEALTH)
+ #undef OPHEALTH
+ };
+ 
+-#ifdef DEBUG
+ size_t js::jit::NumInputsForCacheKind(CacheKind kind) {
+   switch (kind) {
+     case CacheKind::NewArray:
+     case CacheKind::NewObject:
+     case CacheKind::GetIntrinsic:
+       return 0;
+     case CacheKind::GetProp:
+     case CacheKind::TypeOf:
+@@ -119,29 +118,28 @@ size_t js::jit::NumInputsForCacheKind(Ca
+     case CacheKind::BinaryArith:
+       return 2;
+     case CacheKind::GetElemSuper:
+     case CacheKind::SetElem:
+       return 3;
+   }
+   MOZ_CRASH("Invalid kind");
+ }
+-#endif
+ 
+ #ifdef DEBUG
+ void CacheIRWriter::assertSameCompartment(JSObject* obj) {
+   cx_->debugOnlyCheck(obj);
+ }
+ void CacheIRWriter::assertSameZone(Shape* shape) {
+   MOZ_ASSERT(cx_->zone() == shape->zone());
+ }
+ #endif
+ 
+-StubField CacheIRWriter::readStubFieldForIon(uint32_t offset,
+-                                             StubField::Type type) const {
++StubField CacheIRWriter::readStubField(uint32_t offset,
++                                       StubField::Type type) const {
+   size_t index = 0;
+   size_t currentOffset = 0;
+ 
+   // If we've seen an offset earlier than this before, we know we can start the
+   // search there at least, otherwise, we start the search from the beginning.
+   if (lastOffset_ < offset) {
+     currentOffset = lastOffset_;
+     index = lastIndex_;
+diff --git a/js/src/jit/CacheIR.h b/js/src/jit/CacheIR.h
+--- a/js/src/jit/CacheIR.h
++++ b/js/src/jit/CacheIR.h
+@@ -197,19 +197,17 @@ class TypedOperandId : public OperandId 
+ enum class CacheKind : uint8_t {
+ #define DEFINE_KIND(kind) kind,
+   CACHE_IR_KINDS(DEFINE_KIND)
+ #undef DEFINE_KIND
+ };
+ 
+ extern const char* const CacheKindNames[];
+ 
+-#ifdef DEBUG
+ extern size_t NumInputsForCacheKind(CacheKind kind);
+-#endif
+ 
+ enum class CacheOp {
+ #define DEFINE_OP(op, ...) op,
+   CACHE_IR_OPS(DEFINE_OP)
+ #undef DEFINE_OP
+ };
+ 
+ // CacheIR opcode info that's read in performance-sensitive code. Stored as a
+diff --git a/js/src/jit/CacheIRCompiler.h b/js/src/jit/CacheIRCompiler.h
+--- a/js/src/jit/CacheIRCompiler.h
++++ b/js/src/jit/CacheIRCompiler.h
+@@ -868,22 +868,22 @@ class MOZ_RAII CacheIRCompiler {
+ 
+   void emitLoadValueStubField(StubFieldOffset val, ValueOperand dest);
+   void emitLoadDoubleValueStubField(StubFieldOffset val, ValueOperand dest,
+                                     FloatRegister scratch);
+ 
+   uintptr_t readStubWord(uint32_t offset, StubField::Type type) {
+     MOZ_ASSERT(stubFieldPolicy_ == StubFieldPolicy::Constant);
+     MOZ_ASSERT((offset % sizeof(uintptr_t)) == 0);
+-    return writer_.readStubFieldForIon(offset, type).asWord();
++    return writer_.readStubField(offset, type).asWord();
+   }
+   uint64_t readStubInt64(uint32_t offset, StubField::Type type) {
+     MOZ_ASSERT(stubFieldPolicy_ == StubFieldPolicy::Constant);
+     MOZ_ASSERT((offset % sizeof(uintptr_t)) == 0);
+-    return writer_.readStubFieldForIon(offset, type).asInt64();
++    return writer_.readStubField(offset, type).asInt64();
+   }
+   int32_t int32StubField(uint32_t offset) {
+     MOZ_ASSERT(stubFieldPolicy_ == StubFieldPolicy::Constant);
+     return readStubWord(offset, StubField::Type::RawInt32);
+   }
+   uint32_t uint32StubField(uint32_t offset) {
+     MOZ_ASSERT(stubFieldPolicy_ == StubFieldPolicy::Constant);
+     return readStubWord(offset, StubField::Type::RawInt32);
+diff --git a/js/src/jit/CacheIRWriter.h b/js/src/jit/CacheIRWriter.h
+--- a/js/src/jit/CacheIRWriter.h
++++ b/js/src/jit/CacheIRWriter.h
+@@ -96,17 +96,17 @@ class MOZ_RAII CacheIRWriter : public JS
+   static const size_t MaxOperandIds = 20;
+   static const size_t MaxStubDataSizeInBytes = 20 * sizeof(uintptr_t);
+   bool tooLarge_;
+ 
+   // Assume this stub can't be trial inlined until we see a scripted call/inline
+   // instruction.
+   TrialInliningState trialInliningState_ = TrialInliningState::Failure;
+ 
+-  // Basic caching to avoid quadatic lookup behaviour in readStubFieldForIon.
++  // Basic caching to avoid quadatic lookup behaviour in readStubField.
+   mutable uint32_t lastOffset_;
+   mutable uint32_t lastIndex_;
+ 
+ #ifdef DEBUG
+   // Information for assertLengthMatches.
+   mozilla::Maybe<CacheOp> currentOp_;
+   size_t currentOpArgsStart_ = 0;
+ #endif
+@@ -367,17 +367,17 @@ class MOZ_RAII CacheIRWriter : public JS
+ 
+   uint32_t codeLength() const {
+     MOZ_ASSERT(!failed());
+     return buffer_.length();
+   }
+ 
+   // This should not be used when compiling Baseline code, as Baseline code
+   // shouldn't bake in stub values.
+-  StubField readStubFieldForIon(uint32_t offset, StubField::Type type) const;
++  StubField readStubField(uint32_t offset, StubField::Type type) const;
+ 
+   ObjOperandId guardToObject(ValOperandId input) {
+     guardToObject_(input);
+     return ObjOperandId(input.id());
+   }
+ 
+   StringOperandId guardToString(ValOperandId input) {
+     guardToString_(input);
+diff --git a/js/src/jit/TrialInlining.cpp b/js/src/jit/TrialInlining.cpp
+--- a/js/src/jit/TrialInlining.cpp
++++ b/js/src/jit/TrialInlining.cpp
+@@ -734,16 +734,21 @@ bool TrialInliner::tryInlining() {
+   BytecodeLocation startLoc = script_->location();
+ 
+   for (uint32_t icIndex = 0; icIndex < numICEntries; icIndex++) {
+     ICEntry& entry = icScript_->icEntry(icIndex);
+     ICFallbackStub* fallback = icScript_->fallbackStub(icIndex);
+     BytecodeLocation loc =
+         startLoc + BytecodeLocationOffset(fallback->pcOffset());
+     JSOp op = loc.getOp();
++
++    if (!TryFoldingStubs(cx(), fallback, script_, icScript_)) {
++      return false;
++    }
++
+     switch (op) {
+       case JSOp::Call:
+       case JSOp::CallIgnoresRv:
+       case JSOp::CallIter:
+       case JSOp::New:
+       case JSOp::SuperCall:
+         if (!maybeInlineCall(entry, fallback, loc)) {
+           return false;

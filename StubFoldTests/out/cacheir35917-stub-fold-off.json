@@ -1,0 +1,5810 @@
+
+[
+  {
+    "name": "BindName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 5,
+    "column": 4,
+    "pc": "107a88331",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "sum"
+    },
+    "cacheIR": [
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "LoadObjectResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalName"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 5,
+    "column": 4,
+    "pc": "107a88336",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "sum"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "GetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 5,
+    "column": 4,
+    "pc": "107a8833e",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e008b8 (shape: ae4be866400)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadFixedSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "BinaryArith",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 5,
+    "column": 4,
+    "pc": "107a88343",
+    "op": "Add",
+    "rhs": {
+      "type": "int32",
+      "value": 1
+    },
+    "lhs": {
+      "type": "int32",
+      "value": 4
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "Int32AddResult",
+        "args": [
+          {
+            "name": "lhsId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "attached": "BinaryArith.Int32.Add"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 5,
+    "column": 4,
+    "pc": "107a88344",
+    "op": "SetGName",
+    "base": {
+      "type": "global",
+      "value": "ae4be83f030 (shape: ae4be866520)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "sum"
+    },
+    "value": {
+      "type": "int32",
+      "value": 5
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreDynamicSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "GetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 5,
+    "column": 4,
+    "pc": "107a8833e",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e008e8 (shape: ae4be866420)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadFixedSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 11,
+    "column": 16,
+    "pc": "107dd8c4f",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "Compare",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 11,
+    "column": 16,
+    "pc": "107dd8c56",
+    "lhs": {
+      "type": "int32",
+      "value": 3
+    },
+    "rhs": {
+      "type": "int32",
+      "value": 11
+    },
+    "op": "Lt",
+    "cacheIR": [
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "CompareInt32Result",
+        "args": [
+          {
+            "name": "op",
+            "type": "JSOp",
+            "value": "Lt"
+          },
+          {
+            "name": "lhsId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Int32"
+  },
+  {
+    "name": "ToBool",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 11,
+    "column": 16,
+    "pc": "107dd8c57",
+    "val": {
+      "type": "boolean"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardNonDoubleType",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "type",
+            "type": "Imm",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "op": "LoadOperandResult",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "ToBoolBool"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 12,
+    "column": 4,
+    "pc": "107dd8c61",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "foo"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "NewObject",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 12,
+    "column": 4,
+    "pc": "107dd8c67",
+    "op": "NewObject",
+    "cacheIR": [
+      {
+        "op": "GuardNoAllocationMetadataBuilder",
+        "args": [
+          {
+            "name": "builderAddrOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "NewPlainObjectResult",
+        "args": [
+          {
+            "name": "numFixedSlots",
+            "type": "Imm",
+            "value": 1
+          },
+          {
+            "name": "numDynamicSlots",
+            "type": "Imm",
+            "value": 0
+          },
+          {
+            "name": "allocKind",
+            "type": "Imm",
+            "value": 5
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "siteOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NewPlainObject"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 12,
+    "column": 9,
+    "pc": "107dd8c6d",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00918 (shape: ae4be866400)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "value": {
+      "type": "int32",
+      "value": 1
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "Call",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 12,
+    "column": 7,
+    "pc": "107dd8c72",
+    "callee": {
+      "type": "Function",
+      "value": "1c7b72e00738 (shape: ae4be83e180)",
+      "funName": "foo",
+      "flags": [
+      ]
+    },
+    "thisval": {
+      "type": "undefined"
+    },
+    "argc": {
+      "type": "int32",
+      "value": 1
+    },
+    "arg0": {
+      "type": "Object",
+      "value": "1c7b72e00918 (shape: ae4be866400)",
+      "flags": [
+      ]
+    },
+    "cacheIR": [
+      {
+        "op": "LoadArgumentDynamicSlot",
+        "args": [
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "slotIndex",
+            "type": "Imm",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardSpecificFunction",
+        "args": [
+          {
+            "name": "funId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "expectedOffset",
+            "type": "Field",
+            "value": 0
+          },
+          {
+            "name": "nargsAndFlagsOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "CallScriptedFunction",
+        "args": [
+          {
+            "name": "calleeId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "flags",
+            "type": "Imm",
+            "value": 65
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Call scripted func"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 13,
+    "column": 4,
+    "pc": "107dd8c76",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "foo"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "NewObject",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 13,
+    "column": 4,
+    "pc": "107dd8c7c",
+    "op": "NewObject",
+    "cacheIR": [
+      {
+        "op": "GuardNoAllocationMetadataBuilder",
+        "args": [
+          {
+            "name": "builderAddrOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "NewPlainObjectResult",
+        "args": [
+          {
+            "name": "numFixedSlots",
+            "type": "Imm",
+            "value": 2
+          },
+          {
+            "name": "numDynamicSlots",
+            "type": "Imm",
+            "value": 0
+          },
+          {
+            "name": "allocKind",
+            "type": "Imm",
+            "value": 5
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "siteOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NewPlainObject"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 13,
+    "column": 9,
+    "pc": "107dd8c82",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00948 (shape: ae4be866420)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "value": {
+      "type": "int32",
+      "value": 1
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 13,
+    "column": 13,
+    "pc": "107dd8c89",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00948 (shape: ae4be866420)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "b"
+    },
+    "value": {
+      "type": "int32",
+      "value": 2
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "Call",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 13,
+    "column": 7,
+    "pc": "107dd8c8e",
+    "callee": {
+      "type": "Function",
+      "value": "1c7b72e00738 (shape: ae4be83e180)",
+      "funName": "foo",
+      "flags": [
+      ]
+    },
+    "thisval": {
+      "type": "undefined"
+    },
+    "argc": {
+      "type": "int32",
+      "value": 1
+    },
+    "arg0": {
+      "type": "Object",
+      "value": "1c7b72e00948 (shape: ae4be866420)",
+      "flags": [
+      ]
+    },
+    "cacheIR": [
+      {
+        "op": "LoadArgumentDynamicSlot",
+        "args": [
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "slotIndex",
+            "type": "Imm",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardSpecificFunction",
+        "args": [
+          {
+            "name": "funId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "expectedOffset",
+            "type": "Field",
+            "value": 0
+          },
+          {
+            "name": "nargsAndFlagsOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "CallScriptedFunction",
+        "args": [
+          {
+            "name": "calleeId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "flags",
+            "type": "Imm",
+            "value": 65
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Call scripted func"
+  },
+  {
+    "name": "BindName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 11,
+    "column": 24,
+    "pc": "107dd8c92",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "cacheIR": [
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "LoadObjectResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalName"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 11,
+    "column": 24,
+    "pc": "107dd8c97",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "UnaryArith",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 11,
+    "column": 24,
+    "pc": "107dd8c9c",
+    "val": {
+      "type": "int32",
+      "value": 3
+    },
+    "res": {
+      "type": "int32",
+      "value": 3
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadInt32Result",
+        "args": [
+          {
+            "name": "valId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "attached": "UnaryArith.Int32ToNumeric"
+  },
+  {
+    "name": "UnaryArith",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 11,
+    "column": 24,
+    "pc": "107dd8c9e",
+    "val": {
+      "type": "int32",
+      "value": 3
+    },
+    "res": {
+      "type": "int32",
+      "value": 4
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "Int32IncResult",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "attached": "UnaryArith.Int32Inc"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 11,
+    "column": 24,
+    "pc": "107dd8ca2",
+    "op": "SetGName",
+    "base": {
+      "type": "global",
+      "value": "ae4be83f030 (shape: ae4be866520)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "value": {
+      "type": "int32",
+      "value": 4
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreDynamicSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 17,
+    "column": 0,
+    "pc": "107dd8cb3",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "foo"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "Call",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 17,
+    "column": 3,
+    "pc": "107dd8cbe",
+    "callee": {
+      "type": "Function",
+      "value": "1c7b72e00738 (shape: ae4be83e180)",
+      "funName": "foo",
+      "flags": [
+      ]
+    },
+    "thisval": {
+      "type": "undefined"
+    },
+    "argc": {
+      "type": "int32",
+      "value": 1
+    },
+    "arg0": {
+      "type": "Object",
+      "value": "ae4be8440b0 (shape: ae4be866480)",
+      "flags": [
+      ]
+    },
+    "cacheIR": [
+      {
+        "op": "LoadArgumentDynamicSlot",
+        "args": [
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "slotIndex",
+            "type": "Imm",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardSpecificFunction",
+        "args": [
+          {
+            "name": "funId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "expectedOffset",
+            "type": "Field",
+            "value": 0
+          },
+          {
+            "name": "nargsAndFlagsOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "CallScriptedFunction",
+        "args": [
+          {
+            "name": "calleeId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "flags",
+            "type": "Imm",
+            "value": 65
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Call scripted func"
+  },
+  {
+    "name": "GetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 5,
+    "column": 4,
+    "pc": "107a8833e",
+    "base": {
+      "type": "Object",
+      "value": "ae4be8440b0 (shape: ae4be866480)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadFixedSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 20,
+    "column": 13,
+    "pc": "107dd8cc8",
+    "op": "SetGName",
+    "base": {
+      "type": "global",
+      "value": "ae4be83f030 (shape: ae4be866520)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "value": {
+      "type": "int32",
+      "value": 0
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreDynamicSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 20,
+    "column": 16,
+    "pc": "107dd8cd4",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "Compare",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 20,
+    "column": 16,
+    "pc": "107dd8cdb",
+    "lhs": {
+      "type": "int32",
+      "value": 0
+    },
+    "rhs": {
+      "type": "int32",
+      "value": 16
+    },
+    "op": "Lt",
+    "cacheIR": [
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "CompareInt32Result",
+        "args": [
+          {
+            "name": "op",
+            "type": "JSOp",
+            "value": "Lt"
+          },
+          {
+            "name": "lhsId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Int32"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 21,
+    "column": 4,
+    "pc": "107dd8ce6",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "foo"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "NewObject",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 21,
+    "column": 4,
+    "pc": "107dd8cec",
+    "op": "NewObject",
+    "cacheIR": [
+      {
+        "op": "GuardNoAllocationMetadataBuilder",
+        "args": [
+          {
+            "name": "builderAddrOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "NewPlainObjectResult",
+        "args": [
+          {
+            "name": "numFixedSlots",
+            "type": "Imm",
+            "value": 1
+          },
+          {
+            "name": "numDynamicSlots",
+            "type": "Imm",
+            "value": 0
+          },
+          {
+            "name": "allocKind",
+            "type": "Imm",
+            "value": 5
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "siteOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NewPlainObject"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 21,
+    "column": 9,
+    "pc": "107dd8cf2",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00c18 (shape: ae4be866400)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "value": {
+      "type": "int32",
+      "value": 1
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "Call",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 21,
+    "column": 7,
+    "pc": "107dd8cf7",
+    "callee": {
+      "type": "Function",
+      "value": "1c7b72e00738 (shape: ae4be83e180)",
+      "funName": "foo",
+      "flags": [
+      ]
+    },
+    "thisval": {
+      "type": "undefined"
+    },
+    "argc": {
+      "type": "int32",
+      "value": 1
+    },
+    "arg0": {
+      "type": "Object",
+      "value": "1c7b72e00c18 (shape: ae4be866400)",
+      "flags": [
+      ]
+    },
+    "cacheIR": [
+      {
+        "op": "LoadArgumentDynamicSlot",
+        "args": [
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "slotIndex",
+            "type": "Imm",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardSpecificFunction",
+        "args": [
+          {
+            "name": "funId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "expectedOffset",
+            "type": "Field",
+            "value": 0
+          },
+          {
+            "name": "nargsAndFlagsOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "CallScriptedFunction",
+        "args": [
+          {
+            "name": "calleeId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "flags",
+            "type": "Imm",
+            "value": 65
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Call scripted func"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 20,
+    "column": 24,
+    "pc": "107dd8d00",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "UnaryArith",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 20,
+    "column": 24,
+    "pc": "107dd8d05",
+    "val": {
+      "type": "int32",
+      "value": 0
+    },
+    "res": {
+      "type": "int32",
+      "value": 0
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadInt32Result",
+        "args": [
+          {
+            "name": "valId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "attached": "UnaryArith.Int32ToNumeric"
+  },
+  {
+    "name": "UnaryArith",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 20,
+    "column": 24,
+    "pc": "107dd8d07",
+    "val": {
+      "type": "int32",
+      "value": 0
+    },
+    "res": {
+      "type": "int32",
+      "value": 1
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "Int32IncResult",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "attached": "UnaryArith.Int32Inc"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 20,
+    "column": 24,
+    "pc": "107dd8d0b",
+    "op": "SetGName",
+    "base": {
+      "type": "global",
+      "value": "ae4be83f030 (shape: ae4be866520)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "value": {
+      "type": "int32",
+      "value": 1
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreDynamicSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "GetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 5,
+    "column": 4,
+    "pc": "107a8833e",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00d38 (shape: ae4be866400)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadFixedSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 25,
+    "column": 0,
+    "pc": "107dd8d1c",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "foo"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "Call",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 25,
+    "column": 3,
+    "pc": "107dd8d27",
+    "callee": {
+      "type": "Function",
+      "value": "1c7b72e00738 (shape: ae4be83e180)",
+      "funName": "foo",
+      "flags": [
+      ]
+    },
+    "thisval": {
+      "type": "undefined"
+    },
+    "argc": {
+      "type": "int32",
+      "value": 1
+    },
+    "arg0": {
+      "type": "Object",
+      "value": "ae4be8440e8 (shape: ae4be8664a0)",
+      "flags": [
+      ]
+    },
+    "cacheIR": [
+      {
+        "op": "LoadArgumentDynamicSlot",
+        "args": [
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "slotIndex",
+            "type": "Imm",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardSpecificFunction",
+        "args": [
+          {
+            "name": "funId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "expectedOffset",
+            "type": "Field",
+            "value": 0
+          },
+          {
+            "name": "nargsAndFlagsOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "CallScriptedFunction",
+        "args": [
+          {
+            "name": "calleeId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "flags",
+            "type": "Imm",
+            "value": 65
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Call scripted func"
+  },
+  {
+    "name": "GetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 5,
+    "column": 4,
+    "pc": "107a8833e",
+    "base": {
+      "type": "Object",
+      "value": "ae4be8440e8 (shape: ae4be8664a0)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadFixedSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 28,
+    "column": 13,
+    "pc": "107dd8d31",
+    "op": "SetGName",
+    "base": {
+      "type": "global",
+      "value": "ae4be83f030 (shape: ae4be866520)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "value": {
+      "type": "int32",
+      "value": 0
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreDynamicSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 28,
+    "column": 16,
+    "pc": "107dd8d3d",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "Compare",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 28,
+    "column": 16,
+    "pc": "107dd8d44",
+    "lhs": {
+      "type": "int32",
+      "value": 0
+    },
+    "rhs": {
+      "type": "int32",
+      "value": 20
+    },
+    "op": "Lt",
+    "cacheIR": [
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "CompareInt32Result",
+        "args": [
+          {
+            "name": "op",
+            "type": "JSOp",
+            "value": "Lt"
+          },
+          {
+            "name": "lhsId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Int32"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 29,
+    "column": 4,
+    "pc": "107dd8d4f",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "foo"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "NewObject",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 29,
+    "column": 4,
+    "pc": "107dd8d55",
+    "op": "NewObject",
+    "cacheIR": [
+      {
+        "op": "GuardNoAllocationMetadataBuilder",
+        "args": [
+          {
+            "name": "builderAddrOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "NewPlainObjectResult",
+        "args": [
+          {
+            "name": "numFixedSlots",
+            "type": "Imm",
+            "value": 1
+          },
+          {
+            "name": "numDynamicSlots",
+            "type": "Imm",
+            "value": 0
+          },
+          {
+            "name": "allocKind",
+            "type": "Imm",
+            "value": 5
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "siteOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NewPlainObject"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 29,
+    "column": 9,
+    "pc": "107dd8d5b",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00f18 (shape: ae4be866400)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "value": {
+      "type": "int32",
+      "value": 1
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "Call",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 29,
+    "column": 7,
+    "pc": "107dd8d60",
+    "callee": {
+      "type": "Function",
+      "value": "1c7b72e00738 (shape: ae4be83e180)",
+      "funName": "foo",
+      "flags": [
+      ]
+    },
+    "thisval": {
+      "type": "undefined"
+    },
+    "argc": {
+      "type": "int32",
+      "value": 1
+    },
+    "arg0": {
+      "type": "Object",
+      "value": "1c7b72e00f18 (shape: ae4be866400)",
+      "flags": [
+      ]
+    },
+    "cacheIR": [
+      {
+        "op": "LoadArgumentDynamicSlot",
+        "args": [
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "slotIndex",
+            "type": "Imm",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardSpecificFunction",
+        "args": [
+          {
+            "name": "funId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "expectedOffset",
+            "type": "Field",
+            "value": 0
+          },
+          {
+            "name": "nargsAndFlagsOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "CallScriptedFunction",
+        "args": [
+          {
+            "name": "calleeId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "flags",
+            "type": "Imm",
+            "value": 65
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Call scripted func"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 30,
+    "column": 4,
+    "pc": "107dd8d64",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "foo"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "NewObject",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 30,
+    "column": 4,
+    "pc": "107dd8d6a",
+    "op": "NewObject",
+    "cacheIR": [
+      {
+        "op": "GuardNoAllocationMetadataBuilder",
+        "args": [
+          {
+            "name": "builderAddrOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "NewPlainObjectResult",
+        "args": [
+          {
+            "name": "numFixedSlots",
+            "type": "Imm",
+            "value": 2
+          },
+          {
+            "name": "numDynamicSlots",
+            "type": "Imm",
+            "value": 0
+          },
+          {
+            "name": "allocKind",
+            "type": "Imm",
+            "value": 5
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "siteOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NewPlainObject"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 30,
+    "column": 9,
+    "pc": "107dd8d70",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00f48 (shape: ae4be866420)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "value": {
+      "type": "int32",
+      "value": 1
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 30,
+    "column": 13,
+    "pc": "107dd8d77",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00f48 (shape: ae4be866420)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "b"
+    },
+    "value": {
+      "type": "int32",
+      "value": 2
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "Call",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 30,
+    "column": 7,
+    "pc": "107dd8d7c",
+    "callee": {
+      "type": "Function",
+      "value": "1c7b72e00738 (shape: ae4be83e180)",
+      "funName": "foo",
+      "flags": [
+      ]
+    },
+    "thisval": {
+      "type": "undefined"
+    },
+    "argc": {
+      "type": "int32",
+      "value": 1
+    },
+    "arg0": {
+      "type": "Object",
+      "value": "1c7b72e00f48 (shape: ae4be866420)",
+      "flags": [
+      ]
+    },
+    "cacheIR": [
+      {
+        "op": "LoadArgumentDynamicSlot",
+        "args": [
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "slotIndex",
+            "type": "Imm",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardSpecificFunction",
+        "args": [
+          {
+            "name": "funId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "expectedOffset",
+            "type": "Field",
+            "value": 0
+          },
+          {
+            "name": "nargsAndFlagsOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "CallScriptedFunction",
+        "args": [
+          {
+            "name": "calleeId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "flags",
+            "type": "Imm",
+            "value": 65
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Call scripted func"
+  },
+  {
+    "name": "GetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 5,
+    "column": 4,
+    "pc": "107a8833e",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00f48 (shape: ae4be866420)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadFixedSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 31,
+    "column": 4,
+    "pc": "107dd8d80",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "foo"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "NewObject",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 31,
+    "column": 4,
+    "pc": "107dd8d86",
+    "op": "NewObject",
+    "cacheIR": [
+      {
+        "op": "GuardNoAllocationMetadataBuilder",
+        "args": [
+          {
+            "name": "builderAddrOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "NewPlainObjectResult",
+        "args": [
+          {
+            "name": "numFixedSlots",
+            "type": "Imm",
+            "value": 3
+          },
+          {
+            "name": "numDynamicSlots",
+            "type": "Imm",
+            "value": 0
+          },
+          {
+            "name": "allocKind",
+            "type": "Imm",
+            "value": 8
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "siteOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NewPlainObject"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 31,
+    "column": 9,
+    "pc": "107dd8d8c",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00f78 (shape: ae4be866480)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "value": {
+      "type": "int32",
+      "value": 1
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 31,
+    "column": 13,
+    "pc": "107dd8d93",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00f78 (shape: ae4be866480)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "b"
+    },
+    "value": {
+      "type": "int32",
+      "value": 2
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 31,
+    "column": 17,
+    "pc": "107dd8d9a",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00f78 (shape: ae4be866480)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "c"
+    },
+    "value": {
+      "type": "int32",
+      "value": 3
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "Call",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 31,
+    "column": 7,
+    "pc": "107dd8d9f",
+    "callee": {
+      "type": "Function",
+      "value": "1c7b72e00738 (shape: ae4be83e180)",
+      "funName": "foo",
+      "flags": [
+      ]
+    },
+    "thisval": {
+      "type": "undefined"
+    },
+    "argc": {
+      "type": "int32",
+      "value": 1
+    },
+    "arg0": {
+      "type": "Object",
+      "value": "1c7b72e00f78 (shape: ae4be866480)",
+      "flags": [
+      ]
+    },
+    "cacheIR": [
+      {
+        "op": "LoadArgumentDynamicSlot",
+        "args": [
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "slotIndex",
+            "type": "Imm",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardSpecificFunction",
+        "args": [
+          {
+            "name": "funId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "expectedOffset",
+            "type": "Field",
+            "value": 0
+          },
+          {
+            "name": "nargsAndFlagsOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "CallScriptedFunction",
+        "args": [
+          {
+            "name": "calleeId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "flags",
+            "type": "Imm",
+            "value": 65
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Call scripted func"
+  },
+  {
+    "name": "GetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 5,
+    "column": 4,
+    "pc": "107a8833e",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00f78 (shape: ae4be866480)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadFixedSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 32,
+    "column": 4,
+    "pc": "107dd8da3",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "foo"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "NewObject",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 32,
+    "column": 4,
+    "pc": "107dd8da9",
+    "op": "NewObject",
+    "cacheIR": [
+      {
+        "op": "GuardNoAllocationMetadataBuilder",
+        "args": [
+          {
+            "name": "builderAddrOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "NewPlainObjectResult",
+        "args": [
+          {
+            "name": "numFixedSlots",
+            "type": "Imm",
+            "value": 4
+          },
+          {
+            "name": "numDynamicSlots",
+            "type": "Imm",
+            "value": 0
+          },
+          {
+            "name": "allocKind",
+            "type": "Imm",
+            "value": 8
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "siteOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NewPlainObject"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 32,
+    "column": 9,
+    "pc": "107dd8daf",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00fb8 (shape: ae4be8664a0)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "a"
+    },
+    "value": {
+      "type": "int32",
+      "value": 1
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 32,
+    "column": 13,
+    "pc": "107dd8db6",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00fb8 (shape: ae4be8664a0)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "b"
+    },
+    "value": {
+      "type": "int32",
+      "value": 2
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 32,
+    "column": 17,
+    "pc": "107dd8dbd",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00fb8 (shape: ae4be8664a0)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "c"
+    },
+    "value": {
+      "type": "int32",
+      "value": 3
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 32,
+    "column": 21,
+    "pc": "107dd8dc4",
+    "op": "InitProp",
+    "base": {
+      "type": "Object",
+      "value": "1c7b72e00fb8 (shape: ae4be8664a0)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "d"
+    },
+    "value": {
+      "type": "int32",
+      "value": 4
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreFixedSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "Call",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 32,
+    "column": 7,
+    "pc": "107dd8dc9",
+    "callee": {
+      "type": "Function",
+      "value": "1c7b72e00738 (shape: ae4be83e180)",
+      "funName": "foo",
+      "flags": [
+      ]
+    },
+    "thisval": {
+      "type": "undefined"
+    },
+    "argc": {
+      "type": "int32",
+      "value": 1
+    },
+    "arg0": {
+      "type": "Object",
+      "value": "1c7b72e00fb8 (shape: ae4be8664a0)",
+      "flags": [
+      ]
+    },
+    "cacheIR": [
+      {
+        "op": "LoadArgumentDynamicSlot",
+        "args": [
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "slotIndex",
+            "type": "Imm",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardSpecificFunction",
+        "args": [
+          {
+            "name": "funId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "expectedOffset",
+            "type": "Field",
+            "value": 0
+          },
+          {
+            "name": "nargsAndFlagsOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "CallScriptedFunction",
+        "args": [
+          {
+            "name": "calleeId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "flags",
+            "type": "Imm",
+            "value": 65
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "Call scripted func"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 28,
+    "column": 24,
+    "pc": "107dd8dd2",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "UnaryArith",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 28,
+    "column": 24,
+    "pc": "107dd8dd7",
+    "val": {
+      "type": "int32",
+      "value": 0
+    },
+    "res": {
+      "type": "int32",
+      "value": 0
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadInt32Result",
+        "args": [
+          {
+            "name": "valId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "attached": "UnaryArith.Int32ToNumeric"
+  },
+  {
+    "name": "UnaryArith",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 28,
+    "column": 24,
+    "pc": "107dd8dd9",
+    "val": {
+      "type": "int32",
+      "value": 0
+    },
+    "res": {
+      "type": "int32",
+      "value": 1
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToInt32",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "Int32IncResult",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "attached": "UnaryArith.Int32Inc"
+  },
+  {
+    "name": "SetProp",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 28,
+    "column": 24,
+    "pc": "107dd8ddd",
+    "op": "SetGName",
+    "base": {
+      "type": "global",
+      "value": "ae4be83f030 (shape: ae4be866520)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "i"
+    },
+    "value": {
+      "type": "int32",
+      "value": 1
+    },
+    "cacheIR": [
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "StoreDynamicSlot",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 8
+          },
+          {
+            "name": "rhsId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "NativeSlot"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 35,
+    "column": 0,
+    "pc": "107dd8dee",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "assertEq"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 35,
+    "column": 0,
+    "pc": "107dd8df4",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "sum"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "Call",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 35,
+    "column": 8,
+    "pc": "107dd8dfb",
+    "callee": {
+      "type": "Function",
+      "value": "ae4be852970 (shape: ae4be851900)",
+      "funName": "assertEq",
+      "flags": [
+      ]
+    },
+    "thisval": {
+      "type": "undefined"
+    },
+    "argc": {
+      "type": "int32",
+      "value": 2
+    },
+    "arg0": {
+      "type": "int32",
+      "value": 120
+    },
+    "arg1": {
+      "type": "int32",
+      "value": 120
+    },
+    "cacheIR": [
+      {
+        "op": "LoadArgumentDynamicSlot",
+        "args": [
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "slotIndex",
+            "type": "Imm",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardSpecificFunction",
+        "args": [
+          {
+            "name": "funId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "expectedOffset",
+            "type": "Field",
+            "value": 0
+          },
+          {
+            "name": "nargsAndFlagsOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "CallNativeFunction",
+        "args": [
+          {
+            "name": "calleeId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "flags",
+            "type": "Imm",
+            "value": 65
+          },
+          {
+            "name": "ignoresReturnValue",
+            "type": "Imm",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "attached": "CallNative"
+  },
+  {
+    "name": "GetName",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 36,
+    "column": 0,
+    "pc": "107dd8dff",
+    "base": {
+      "type": "LexicalEnvironment",
+      "value": "ae4be840038 (shape: ae4be83e060)",
+      "flags": [
+      ]
+    },
+    "property": {
+      "type": "string",
+      "value": "cacheIRHealthReport"
+    },
+    "cacheIR": [
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "op": "LoadEnclosingEnvironment",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardShape",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "shapeOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "LoadDynamicSlotResult",
+        "args": [
+          {
+            "name": "objId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "offsetOffset",
+            "type": "Field",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "op": "ReturnFromIC",
+        "args": [
+        ]
+      }
+    ],
+    "attached": "GlobalNameValue"
+  },
+  {
+    "name": "Call",
+    "file": "../stub-folding-add-case.js",
+    "mode": 0,
+    "line": 36,
+    "column": 0,
+    "pc": "107dd8e05",
+    "callee": {
+      "type": "Function",
+      "value": "ae4be861cf0 (shape: ae4be851900)",
+      "funName": "cacheIRHealthReport",
+      "flags": [
+      ]
+    },
+    "thisval": {
+      "type": "undefined"
+    },
+    "argc": {
+      "type": "int32",
+      "value": 0
+    },
+    "cacheIR": [
+      {
+        "op": "LoadArgumentDynamicSlot",
+        "args": [
+          {
+            "name": "resultId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "slotIndex",
+            "type": "Imm",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardToObject",
+        "args": [
+          {
+            "name": "inputId",
+            "type": "Id",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "op": "GuardSpecificFunction",
+        "args": [
+          {
+            "name": "funId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "expectedOffset",
+            "type": "Field",
+            "value": 0
+          },
+          {
+            "name": "nargsAndFlagsOffset",
+            "type": "Field",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "op": "CallNativeFunction",
+        "args": [
+          {
+            "name": "calleeId",
+            "type": "Id",
+            "value": 1
+          },
+          {
+            "name": "argcId",
+            "type": "Id",
+            "value": 0
+          },
+          {
+            "name": "flags",
+            "type": "Imm",
+            "value": 65
+          },
+          {
+            "name": "ignoresReturnValue",
+            "type": "Imm",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "attached": "CallNative"
+  }
+]

@@ -1,0 +1,220 @@
+# HG changeset patch
+# User Iain Ireland <iireland@mozilla.com>
+# Date 1649103315 25200
+#      Mon Apr 04 13:15:15 2022 -0700
+# Node ID 3fbddb1c72bc3cd4bd9650697b8a82c3fe278804
+# Parent  0992c635a8c53621810151649a24429836987fd6
+Bug 1671228: Part 1: Add GuardMultipleShapes
+
+diff --git a/js/src/jit/CacheIRCompiler.cpp b/js/src/jit/CacheIRCompiler.cpp
+--- a/js/src/jit/CacheIRCompiler.cpp
++++ b/js/src/jit/CacheIRCompiler.cpp
+@@ -7247,16 +7247,48 @@ bool CacheIRCompiler::emitGuardWasmArg(V
+     default:
+       MOZ_CRASH("Unexpected kind");
+   }
+   masm.bind(&done);
+ 
+   return true;
+ }
+ 
++bool CacheIRCompiler::emitGuardMultipleShapes(ObjOperandId objId,
++                                              uint32_t shapesOffset) {
++  JitSpew(JitSpew_Codegen, "%s", __FUNCTION__);
++  Register obj = allocator.useRegister(masm, objId);
++  AutoScratchRegister shapes(allocator, masm);
++  AutoScratchRegister scratch(allocator, masm);
++  AutoScratchRegister scratch2(allocator, masm);
++
++  bool needSpectreMitigations = objectGuardNeedsSpectreMitigations(objId);
++
++  Register spectreScratch = InvalidReg;
++  Maybe<AutoScratchRegister> maybeSpectreScratch;
++  if (needSpectreMitigations) {
++    maybeSpectreScratch.emplace(allocator, masm);
++    spectreScratch = *maybeSpectreScratch;
++  }
++
++  FailurePath* failure;
++  if (!addFailurePath(&failure)) {
++    return false;
++  }
++
++  // The stub field contains a ListObject. Load its elements.
++  StubFieldOffset shapeArray(shapesOffset, StubField::Type::JSObject);
++  emitLoadStubField(shapeArray, shapes);
++  masm.loadPtr(Address(shapes, NativeObject::offsetOfElements()), shapes);
++
++  masm.branchTestObjShapeList(Assembler::NotEqual, obj, shapes, scratch,
++                              scratch2, spectreScratch, failure->label());
++  return true;
++}
++
+ bool CacheIRCompiler::emitLoadObject(ObjOperandId resultId,
+                                      uint32_t objOffset) {
+   JitSpew(JitSpew_Codegen, "%s", __FUNCTION__);
+   Register reg = allocator.defineRegister(masm, resultId);
+   StubFieldOffset obj(objOffset, StubField::Type::JSObject);
+   emitLoadStubField(obj, reg);
+   return true;
+ }
+diff --git a/js/src/jit/CacheIROps.yaml b/js/src/jit/CacheIROps.yaml
+--- a/js/src/jit/CacheIROps.yaml
++++ b/js/src/jit/CacheIROps.yaml
+@@ -227,16 +227,25 @@
+ - name: GuardShape
+   shared: false
+   transpile: true
+   cost_estimate: 1
+   args:
+     obj: ObjId
+     shape: ShapeField
+ 
++- name: GuardMultipleShapes
++  shared: true
++  transpile: false
++  cost_estimate: 2
++  custom_writer: true
++  args:
++    obj: ObjId
++    shapes: ObjectField
++
+ - name: GuardProto
+   shared: false
+   transpile: true
+   cost_estimate: 1
+   args:
+     obj: ObjId
+     proto: ObjectField
+ 
+diff --git a/js/src/jit/CacheIRWriter.h b/js/src/jit/CacheIRWriter.h
+--- a/js/src/jit/CacheIRWriter.h
++++ b/js/src/jit/CacheIRWriter.h
+@@ -32,16 +32,17 @@
+ #include "js/Id.h"
+ #include "js/RootingAPI.h"
+ #include "js/ScalarType.h"
+ #include "js/Value.h"
+ #include "js/Vector.h"
+ #include "util/Memory.h"
+ #include "vm/JSFunction.h"
+ #include "vm/JSScript.h"
++#include "vm/List.h"
+ #include "vm/Opcodes.h"
+ #include "vm/Shape.h"
+ #include "wasm/WasmConstants.h"
+ #include "wasm/WasmValType.h"
+ 
+ class JS_PUBLIC_API JSTracer;
+ struct JS_PUBLIC_API JSContext;
+ 
+@@ -606,16 +607,22 @@ class MOZ_RAII CacheIRWriter : public JS
+     MOZ_ASSERT(setter->isNativeWithoutJitEntry());
+     uint32_t nargsAndFlags = setter->flagsAndArgCountRaw();
+     callNativeSetter_(receiver, setter, rhs, sameRealm, nargsAndFlags);
+   }
+ 
+   void metaScriptedThisShape(Shape* thisShape) {
+     metaScriptedThisShape_(thisShape);
+   }
++
++  void guardMultipleShapes(ObjOperandId obj, ListObject* shapes) {
++    MOZ_ASSERT(shapes->length() > 0);
++    guardMultipleShapes_(obj, shapes);
++  }
++
+   friend class CacheIRCloner;
+ 
+   CACHE_IR_WRITER_GENERATED
+ };
+ 
+ }  // namespace jit
+ }  // namespace js
+ 
+diff --git a/js/src/jit/MacroAssembler.cpp b/js/src/jit/MacroAssembler.cpp
+--- a/js/src/jit/MacroAssembler.cpp
++++ b/js/src/jit/MacroAssembler.cpp
+@@ -3689,16 +3689,58 @@ void MacroAssembler::branchTestType(Cond
+     case JSVAL_TYPE_OBJECT:
+       branchTestObject(cond, tag, label);
+       break;
+     default:
+       MOZ_CRASH("Unexpected value type");
+   }
+ }
+ 
++void MacroAssembler::branchTestObjShapeList(
++    Condition cond, Register obj, Register shapeElements, Register shapeScratch,
++    Register endScratch, Register spectreScratch, Label* label) {
++  MOZ_ASSERT(cond == Assembler::Equal || cond == Assembler::NotEqual);
++
++  bool needSpectreMitigations = spectreScratch != InvalidReg;
++
++  Label done;
++  Label* onMatch = cond == Assembler::Equal ? label : &done;
++
++  // Compute end pointer.
++  Address lengthAddr(shapeElements,
++                     ObjectElements::offsetOfInitializedLength());
++  load32(lengthAddr, endScratch);
++  BaseObjectElementIndex endPtrAddr(shapeElements, endScratch);
++  computeEffectiveAddress(endPtrAddr, endScratch);
++
++  Label loop;
++  bind(&loop);
++
++  // Load a shape from the list into shapeScratch and compare against
++  // the object's shape.
++  unboxNonDouble(Address(shapeElements, 0), shapeScratch,
++                 JSVAL_TYPE_PRIVATE_GCTHING);
++  if (needSpectreMitigations) {
++    branchTestObjShape(Assembler::Equal, obj, shapeScratch, spectreScratch, obj,
++                       onMatch);
++  } else {
++    branchTestObjShapeNoSpectreMitigations(Assembler::Equal, obj, shapeScratch,
++                                           onMatch);
++  }
++
++  // Advance to next shape and loop if not finished.
++  addPtr(Imm32(sizeof(Value)), shapeElements);
++  branchPtr(Assembler::Below, shapeElements, endScratch, &loop);
++
++  if (cond == Assembler::NotEqual) {
++    jump(label);
++    bind(&done);
++  }
++}
++
+ void MacroAssembler::branchTestObjCompartment(Condition cond, Register obj,
+                                               const Address& compartment,
+                                               Register scratch, Label* label) {
+   MOZ_ASSERT(obj != scratch);
+   loadPtr(Address(obj, JSObject::offsetOfShape()), scratch);
+   loadPtr(Address(scratch, Shape::offsetOfBaseShape()), scratch);
+   loadPtr(Address(scratch, BaseShape::offsetOfRealm()), scratch);
+   loadPtr(Address(scratch, Realm::offsetOfCompartment()), scratch);
+diff --git a/js/src/jit/MacroAssembler.h b/js/src/jit/MacroAssembler.h
+--- a/js/src/jit/MacroAssembler.h
++++ b/js/src/jit/MacroAssembler.h
+@@ -1682,16 +1682,21 @@ class MacroAssembler : public MacroAssem
+   inline void branchTestObjShape(Condition cond, Register obj,
+                                  const Shape* shape, Register scratch,
+                                  Register spectreRegToZero, Label* label);
+   inline void branchTestObjShapeNoSpectreMitigations(Condition cond,
+                                                      Register obj,
+                                                      const Shape* shape,
+                                                      Label* label);
+ 
++  void branchTestObjShapeList(Condition cond, Register obj,
++                              Register shapeElements, Register shapeScratch,
++                              Register endScratch, Register spectreScratch,
++                              Label* label);
++
+   inline void branchTestClassIsFunction(Condition cond, Register clasp,
+                                         Label* label);
+   inline void branchTestObjIsFunction(Condition cond, Register obj,
+                                       Register scratch,
+                                       Register spectreRegToZero, Label* label);
+   inline void branchTestObjIsFunctionNoSpectreMitigations(Condition cond,
+                                                           Register obj,
+                                                           Register scratch,

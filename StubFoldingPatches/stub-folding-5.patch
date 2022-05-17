@@ -1,0 +1,188 @@
+# HG changeset patch
+# User Iain Ireland <iireland@mozilla.com>
+# Date 1649109675 25200
+#      Mon Apr 04 15:01:15 2022 -0700
+# Node ID e1522e2a32ef99605ac2d9a935edcf40f6bd8548
+# Parent  df6f4f3613cbfc5f477a964022894b45042139bf
+Bug 1671228: Part 5: Try folding stubs before transitioning IC state
+
+diff --git a/js/src/jit/BaselineCacheIRCompiler.cpp b/js/src/jit/BaselineCacheIRCompiler.cpp
+--- a/js/src/jit/BaselineCacheIRCompiler.cpp
++++ b/js/src/jit/BaselineCacheIRCompiler.cpp
+@@ -2422,19 +2422,22 @@ ICAttachResult js::jit::AttachBaselineCa
+   }
+ 
+   // Try including this case in an existing folded stub.
+   if (stub->hasFoldedStub() && AddToFoldedStub(cx, writer, icScript, stub)) {
+     // Instead of adding a new stub, we have added a new case to an
+     // existing folded stub. We do not have to invalidate Warp,
+     // because the ListObject that stores the cases is shared between
+     // baseline and Warp. Reset the entered count for the fallback
+-    // stub so that we can still transpile.
+-    // TODO: Update this for the new bailout strategy
++    // stub so that we can still transpile, and reset the bailout
++    // counter if we have already been transpiled.
+     stub->resetEnteredCount();
++    if (stub->usedByTranspiler() && outerScript->hasIonScript()) {
++      outerScript->ionScript()->resetNumFixableBailouts();
++    }
+     return ICAttachResult::Attached;
+   }
+ 
+   // Time to allocate and attach a new stub.
+ 
+   size_t bytesNeeded = stubInfo->stubDataOffset() + stubInfo->stubDataSize();
+ 
+   ICStubSpace* stubSpace =
+diff --git a/js/src/jit/BaselineIC.cpp b/js/src/jit/BaselineIC.cpp
+--- a/js/src/jit/BaselineIC.cpp
++++ b/js/src/jit/BaselineIC.cpp
+@@ -400,27 +400,33 @@ void ICCacheIRStub::trace(JSTracer* trc)
+   JitCode* stubJitCode = jitCode();
+   TraceManuallyBarrieredEdge(trc, &stubJitCode, "baseline-ic-stub-code");
+ 
+   TraceCacheIRStub(trc, this, stubInfo());
+ }
+ 
+ static void MaybeTransition(JSContext* cx, BaselineFrame* frame,
+                             ICFallbackStub* stub) {
+-  if (stub->state().maybeTransition()) {
+-    ICEntry* icEntry = frame->icScript()->icEntryForStub(stub);
++  if (stub->state().shouldTransition()) {
++    if (!TryFoldingStubs(cx, stub, frame->script(), frame->icScript())) {
++      cx->recoverFromOutOfMemory();
++    }
++    if (stub->state().maybeTransition()) {
++      ICEntry* icEntry = frame->icScript()->icEntryForStub(stub);
+ #ifdef JS_CACHEIR_SPEW
+-    if (cx->spewer().enabled(cx, frame->script(),
+-                             SpewChannel::CacheIRHealthReport)) {
+-      CacheIRHealth cih;
+-      RootedScript script(cx, frame->script());
+-      cih.healthReportForIC(cx, icEntry, stub, script, SpewContext::Transition);
++      if (cx->spewer().enabled(cx, frame->script(),
++                               SpewChannel::CacheIRHealthReport)) {
++        CacheIRHealth cih;
++        RootedScript script(cx, frame->script());
++        cih.healthReportForIC(cx, icEntry, stub, script,
++                              SpewContext::Transition);
++      }
++#endif
++      stub->discardStubs(cx, icEntry);
+     }
+-#endif
+-    stub->discardStubs(cx, icEntry);
+   }
+ }
+ 
+ // This helper handles ICState updates/transitions while attaching CacheIR
+ // stubs.
+ template <typename IRGenerator, typename... Args>
+ static void TryAttachStub(const char* name, JSContext* cx, BaselineFrame* frame,
+                           ICFallbackStub* stub, Args&&... args) {
+diff --git a/js/src/jit/BaselineIC.h b/js/src/jit/BaselineIC.h
+--- a/js/src/jit/BaselineIC.h
++++ b/js/src/jit/BaselineIC.h
+@@ -230,16 +230,17 @@ class ICFallbackStub final : public ICSt
+ 
+   // Add a new stub to the IC chain terminated by this fallback stub.
+   inline void addNewStub(ICEntry* icEntry, ICCacheIRStub* stub);
+ 
+   void discardStubs(JSContext* cx, ICEntry* icEntry);
+ 
+   void clearUsedByTranspiler() { state_.clearUsedByTranspiler(); }
+   void setUsedByTranspiler() { state_.setUsedByTranspiler(); }
++  bool usedByTranspiler() const { return state_.usedByTranspiler(); }
+ 
+   void clearHasFoldedStub() { state_.clearHasFoldedStub(); }
+   void setHasFoldedStub() { state_.setHasFoldedStub(); }
+   bool hasFoldedStub() const { return state_.hasFoldedStub(); }
+ 
+   TrialInliningState trialInliningState() const {
+     return state_.trialInliningState();
+   }
+diff --git a/js/src/jit/ICState.h b/js/src/jit/ICState.h
+--- a/js/src/jit/ICState.h
++++ b/js/src/jit/ICState.h
+@@ -92,29 +92,36 @@ class ICState {
+     // because old-style baseline ICs may attach more stubs than
+     // MaxOptimizedStubs allows.
+     if (mode() == Mode::Generic || JitOptions.disableCacheIR) {
+       return false;
+     }
+     return true;
+   }
+ 
+-  // If this returns true, we transitioned to a new mode and the caller
+-  // should discard all stubs.
+-  [[nodiscard]] MOZ_ALWAYS_INLINE bool maybeTransition() {
++  [[nodiscard]] MOZ_ALWAYS_INLINE bool shouldTransition() {
+     // Note: we cannot assert that numOptimizedStubs_ <= MaxOptimizedStubs
+     // because old-style baseline ICs may attach more stubs than
+     // MaxOptimizedStubs allows.
+     if (mode() == Mode::Generic) {
+       return false;
+     }
+     if (numOptimizedStubs_ < MaxOptimizedStubs &&
+         numFailures_ < maxFailures()) {
+       return false;
+     }
++    return true;
++  }
++
++  // If this returns true, we transitioned to a new mode and the caller
++  // should discard all stubs.
++  [[nodiscard]] MOZ_ALWAYS_INLINE bool maybeTransition() {
++    if (!shouldTransition()) {
++      return false;
++    }
+     if (numFailures_ == maxFailures() || mode() == Mode::Megamorphic) {
+       transition(Mode::Generic);
+       return true;
+     }
+     MOZ_ASSERT(mode() == Mode::Specialized);
+     transition(Mode::Megamorphic);
+     return true;
+   }
+diff --git a/js/src/jit/IonScript.h b/js/src/jit/IonScript.h
+--- a/js/src/jit/IonScript.h
++++ b/js/src/jit/IonScript.h
+@@ -336,16 +336,17 @@ class alignas(8) IonScript final : publi
+     invalidateEpilogueDataOffset_ = offset;
+   }
+   uint32_t invalidateEpilogueDataOffset() const {
+     MOZ_ASSERT(invalidateEpilogueDataOffset_);
+     return invalidateEpilogueDataOffset_;
+   }
+ 
+   void incNumFixableBailouts() { numFixableBailouts_++; }
++  void resetNumFixableBailouts() { numFixableBailouts_ = 0; }
+   void incNumUnfixableBailouts() { numUnfixableBailouts_++; }
+ 
+   bool shouldInvalidate() const {
+     return numFixableBailouts_ >= JitOptions.frequentBailoutThreshold;
+   }
+   bool shouldInvalidateAndDisable() const {
+     return numUnfixableBailouts_ >= JitOptions.frequentBailoutThreshold * 5;
+   }
+diff --git a/js/src/jit/JitScript.h b/js/src/jit/JitScript.h
+--- a/js/src/jit/JitScript.h
++++ b/js/src/jit/JitScript.h
+@@ -541,16 +541,17 @@ class alignas(uintptr_t) JitScript final
+   bool hasFailedICHash() const { return failedICHash_.isSome(); }
+   mozilla::HashNumber getFailedICHash() { return failedICHash_.extract(); }
+   void setFailedICHash(mozilla::HashNumber hash) {
+     MOZ_ASSERT(failedICHash_.isNothing());
+     if (!hasPurgedStubs_) {
+       failedICHash_.emplace(hash);
+     }
+   }
++  void clearFailedICHash() { failedICHash_.reset(); }
+ #endif
+ };
+ 
+ // Ensures no JitScripts are purged in the current zone.
+ class MOZ_RAII AutoKeepJitScripts {
+   jit::JitZone* zone_;
+   bool prev_;
+ 

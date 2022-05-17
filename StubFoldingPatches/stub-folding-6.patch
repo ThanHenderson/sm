@@ -1,0 +1,119 @@
+# HG changeset patch
+# User Iain Ireland <iireland@mozilla.com>
+# Date 1602273438 25200
+#      Fri Oct 09 12:57:18 2020 -0700
+# Node ID c41acc2e414b0714c6283bd5b3959aa30f9fc48a
+# Parent  e1522e2a32ef99605ac2d9a935edcf40f6bd8548
+Bug 1671228: Part 6: Add tests r=jandem
+
+Differential Revision: https://phabricator.services.mozilla.com/D93577
+
+diff --git a/js/src/jit-test/tests/warp/stub-folding-add-case.js b/js/src/jit-test/tests/warp/stub-folding-add-case.js
+new file mode 100644
+--- /dev/null
++++ b/js/src/jit-test/tests/warp/stub-folding-add-case.js
+@@ -0,0 +1,35 @@
++// |jit-test| --fast-warmup
++
++var sum = 0;
++function foo(o) {
++    sum += o.a;
++}
++
++with({}) {}
++
++// Fold a stub with two cases.
++for (var i = 0; i < 11; i++) {
++    foo({a:1});
++    foo({a:1,b:2});
++}
++
++// Add a third case.
++foo({a:1,b:2,c:3});
++
++// Warp-compile.
++for (var i = 0; i < 16; i++) {
++    foo({a:1});
++}
++
++// Add a fourth case.
++foo({a:1,b:2,c:3,d:4});
++
++// Run for a while in Warp.
++for (var i = 0; i < 20; i++) {
++    foo({a:1});
++    foo({a:1,b:2});
++    foo({a:1,b:2,c:3});
++    foo({a:1,b:2,c:3,d:4});
++}
++
++assertEq(sum, 120);
+diff --git a/js/src/jit-test/tests/warp/stub-folding-transition.js b/js/src/jit-test/tests/warp/stub-folding-transition.js
+new file mode 100644
+--- /dev/null
++++ b/js/src/jit-test/tests/warp/stub-folding-transition.js
+@@ -0,0 +1,24 @@
++var sum = 0;
++function foo(o) {
++    sum += o.x;
++}
++
++with({}) {}
++
++// Trigger stub folding in MaybeTransition
++for (var i = 0; i < 200; i++) {
++    foo({x:1, a:1});
++    foo({x:1, b:1});
++    foo({x:1, c:1});
++    foo({x:1, d:1});
++    foo({x:1, e:1});
++    foo({x:1, f:1});
++    foo({x:1, g:1});
++    foo({x:1, h:1});
++    foo({x:1, i:1});
++    foo({x:1, j:1});
++    foo({x:1, k:1});
++    foo({x:1, l:1});
++}
++
++assertEq(sum, 2400);
+diff --git a/js/src/jit-test/tests/warp/stub-folding.js b/js/src/jit-test/tests/warp/stub-folding.js
+new file mode 100644
+--- /dev/null
++++ b/js/src/jit-test/tests/warp/stub-folding.js
+@@ -0,0 +1,35 @@
++// |jit-test| --fast-warmup
++
++with({}) {}
++
++class A {
++    foo() { return 3; }
++    get z() { return 5; }
++}
++
++class B1 extends A {
++    constructor(y) {
++        super();
++        this.y = y;
++    }
++}
++
++class B2 extends A {
++    constructor(x,y) {
++        super();
++        this.y = y;
++        this.x = x;
++    }
++}
++
++var sum = 0;
++function foo(o) {
++    sum += o.foo() + o.y + o.z;
++}
++
++for (var i = 0; i < 50; i++) {
++    foo(new B1(i));
++    foo(new B2(i,i));
++}
++
++assertEq(sum, 3250);

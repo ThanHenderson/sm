@@ -1,0 +1,394 @@
+# HG changeset patch
+# User Iain Ireland <iireland@mozilla.com>
+# Date 1649109184 25200
+#      Mon Apr 04 14:53:04 2022 -0700
+# Node ID df6f4f3613cbfc5f477a964022894b45042139bf
+# Parent  3bb4b1f5e2a29f174c99f1d3cf3ab668895da0d6
+Bug 1671228: Part 4: Add shapes to existing GuardMultipleShapes
+
+diff --git a/js/src/jit/BaselineCacheIRCompiler.cpp b/js/src/jit/BaselineCacheIRCompiler.cpp
+--- a/js/src/jit/BaselineCacheIRCompiler.cpp
++++ b/js/src/jit/BaselineCacheIRCompiler.cpp
+@@ -2059,16 +2059,18 @@ static void ResetEnteredCounts(const ICE
+ static ICStubSpace* StubSpaceForStub(bool makesGCCalls, JSScript* script,
+                                      ICScript* icScript) {
+   if (makesGCCalls) {
+     return icScript->jitScriptStubSpace();
+   }
+   return script->zone()->jitZone()->optimizedStubSpace();
+ }
+ 
++static const uint32_t MaxFoldedShapes = 16;
++
+ bool js::jit::TryFoldingStubs(JSContext* cx, ICFallbackStub* fallback,
+                               JSScript* script, ICScript* icScript) {
+   ICEntry* icEntry = icScript->icEntryForStub(fallback);
+   ICStub* entryStub = icEntry->firstStub();
+ 
+   // Don't fold unless there are at least two stubs.
+   if (entryStub == fallback) {
+     return true;
+@@ -2097,19 +2099,19 @@ bool js::jit::TryFoldingStubs(JSContext*
+   Rooted<ListObject*> shapeList(cx);
+ 
+   {
+     // To prevent stubs from being discarded while we're looking at them,
+     // we suppress GC long enough to allocate the list of shapes and ensure
+     // it has enough space to add shapes without triggering GC later. If
+     // we can't allocate the list without GC, we just skip this optimization.
+     gc::AutoSuppressGC suppress(cx);
++    MOZ_ASSERT(fallback->numOptimizedStubs() < MaxFoldedShapes);
+     shapeList = ListObject::create(cx);
+-    if (!shapeList ||
+-        !shapeList->ensureElements(cx, fallback->numOptimizedStubs())) {
++    if (!shapeList || !shapeList->ensureElements(cx, MaxFoldedShapes)) {
+       cx->recoverFromOutOfMemory();
+       return true;
+     }
+   }
+ 
+   auto addShape = [&cx, &shape, &shapeList](uintptr_t rawShape) {
+     shape = PrivateGCThingValue(reinterpret_cast<Shape*>(rawShape));
+     MOZ_ALWAYS_TRUE(shapeList->append(cx, shape));
+@@ -2220,16 +2222,114 @@ bool js::jit::TryFoldingStubs(JSContext*
+ 
+   ICAttachResult result = AttachBaselineCacheIRStub(cx, writer, cacheKind,
+                                                     script, icScript, fallback);
+   if (result == ICAttachResult::OOM) {
+     ReportOutOfMemory(cx);
+     return false;
+   }
+   MOZ_ASSERT(result == ICAttachResult::Attached);
++
++  fallback->setHasFoldedStub();
++  return true;
++}
++
++static bool AddToFoldedStub(JSContext* cx, const CacheIRWriter& writer,
++                            ICScript* icScript, ICFallbackStub* fallback) {
++  ICEntry* icEntry = icScript->icEntryForStub(fallback);
++  ICStub* entryStub = icEntry->firstStub();
++
++  // We only update folded stubs if they're the only stub in the IC.
++  if (entryStub == fallback) {
++    return true;
++  }
++  ICCacheIRStub* stub = entryStub->toCacheIRStub();
++  if (!stub->next()->isFallback()) {
++    return true;
++  }
++
++  const CacheIRStubInfo* stubInfo = stub->stubInfo();
++  const uint8_t* stubData = stub->stubDataStart();
++
++  Maybe<uint32_t> shapeFieldOffset;
++  RootedValue newShape(cx);
++  Rooted<ListObject*> foldedShapes(cx);
++
++  CacheIRReader stubReader(stubInfo);
++  CacheIRReader newReader(writer);
++  while (newReader.more() && stubReader.more()) {
++    CacheOp newOp = newReader.readOp();
++    CacheOp stubOp = stubReader.readOp();
++    switch (stubOp) {
++      case CacheOp::GuardMultipleShapes: {
++        // Check that the new stub has a corresponding GuardShape.
++        if (newOp != CacheOp::GuardShape) {
++          return false;
++        }
++
++        // Check that the object being guarded is the same.
++        if (newReader.objOperandId() != stubReader.objOperandId()) {
++          return false;
++        }
++
++        // Check that the field offset is the same.
++        uint32_t newShapeOffset = newReader.stubOffset();
++        uint32_t stubShapesOffset = stubReader.stubOffset();
++        if (newShapeOffset != stubShapesOffset) {
++          return false;
++        }
++        MOZ_ASSERT(shapeFieldOffset.isNothing());
++        shapeFieldOffset.emplace(newShapeOffset);
++
++        // Get the shape from the new stub
++        StubField shapeField =
++            writer.readStubField(newShapeOffset, StubField::Type::Shape);
++        newShape =
++            PrivateGCThingValue(reinterpret_cast<Shape*>(shapeField.asWord()));
++
++        // Get the shape array from the old stub.
++        JSObject* shapeList =
++            stubInfo->getStubField<JSObject*>(stub, stubShapesOffset);
++        foldedShapes = &shapeList->as<ListObject>();
++        break;
++      }
++      default: {
++        // Check that the op is the same.
++        if (newOp != stubOp) {
++          return false;
++        }
++
++        // Check that the arguments are the same.
++        uint32_t argLength = CacheIROpInfos[size_t(newOp)].argLength;
++        for (uint32_t i = 0; i < argLength; i++) {
++          if (newReader.readByte() != stubReader.readByte()) {
++            return false;
++          }
++        }
++      }
++    }
++  }
++
++  if (shapeFieldOffset.isNothing()) {
++    return false;
++  }
++
++  // Check to verify that all the other stub fields are the same.
++  if (!writer.stubDataEqualsIgnoring(stubData, *shapeFieldOffset)) {
++    return false;
++  }
++
++  // Limit the maximum number of shapes we will add before giving up.
++  if (foldedShapes->length() == MaxFoldedShapes) {
++    return false;
++  }
++
++  MOZ_ASSERT(foldedShapes->getDenseCapacity() >= MaxFoldedShapes);
++  MOZ_ALWAYS_TRUE(foldedShapes->append(cx, newShape));
++
+   return true;
+ }
+ 
+ ICAttachResult js::jit::AttachBaselineCacheIRStub(
+     JSContext* cx, const CacheIRWriter& writer, CacheKind kind,
+     JSScript* outerScript, ICScript* icScript, ICFallbackStub* stub) {
+   // We shouldn't GC or report OOM (or any other exception) here.
+   AutoAssertNoPendingException aanpe(cx);
+@@ -2316,16 +2416,28 @@ ICAttachResult js::jit::AttachBaselineCa
+     // case.
+     JitSpew(JitSpew_BaselineICFallback,
+             "Tried attaching identical stub for (%s:%u:%u)",
+             outerScript->filename(), outerScript->lineno(),
+             outerScript->column());
+     return ICAttachResult::DuplicateStub;
+   }
+ 
++  // Try including this case in an existing folded stub.
++  if (stub->hasFoldedStub() && AddToFoldedStub(cx, writer, icScript, stub)) {
++    // Instead of adding a new stub, we have added a new case to an
++    // existing folded stub. We do not have to invalidate Warp,
++    // because the ListObject that stores the cases is shared between
++    // baseline and Warp. Reset the entered count for the fallback
++    // stub so that we can still transpile.
++    // TODO: Update this for the new bailout strategy
++    stub->resetEnteredCount();
++    return ICAttachResult::Attached;
++  }
++
+   // Time to allocate and attach a new stub.
+ 
+   size_t bytesNeeded = stubInfo->stubDataOffset() + stubInfo->stubDataSize();
+ 
+   ICStubSpace* stubSpace =
+       StubSpaceForStub(stubInfo->makesGCCalls(), outerScript, icScript);
+   void* newStubMem = stubSpace->alloc(bytesNeeded);
+   if (!newStubMem) {
+diff --git a/js/src/jit/BaselineIC.cpp b/js/src/jit/BaselineIC.cpp
+--- a/js/src/jit/BaselineIC.cpp
++++ b/js/src/jit/BaselineIC.cpp
+@@ -483,16 +483,17 @@ void ICFallbackStub::unlinkStub(Zone* zo
+ 
+ void ICFallbackStub::discardStubs(JSContext* cx, ICEntry* icEntry) {
+   ICStub* stub = icEntry->firstStub();
+   while (stub != this) {
+     unlinkStub(cx->zone(), icEntry, /* prev = */ nullptr,
+                stub->toCacheIRStub());
+     stub = stub->toCacheIRStub()->next();
+   }
++  clearHasFoldedStub();
+ }
+ 
+ static void InitMacroAssemblerForICStub(StackMacroAssembler& masm) {
+ #ifndef JS_USE_LINK_REGISTER
+   // The first value contains the return addres,
+   // which we pull into ICTailCallReg for tail calls.
+   masm.adjustFrame(sizeof(intptr_t));
+ #endif
+diff --git a/js/src/jit/BaselineIC.h b/js/src/jit/BaselineIC.h
+--- a/js/src/jit/BaselineIC.h
++++ b/js/src/jit/BaselineIC.h
+@@ -231,16 +231,20 @@ class ICFallbackStub final : public ICSt
+   // Add a new stub to the IC chain terminated by this fallback stub.
+   inline void addNewStub(ICEntry* icEntry, ICCacheIRStub* stub);
+ 
+   void discardStubs(JSContext* cx, ICEntry* icEntry);
+ 
+   void clearUsedByTranspiler() { state_.clearUsedByTranspiler(); }
+   void setUsedByTranspiler() { state_.setUsedByTranspiler(); }
+ 
++  void clearHasFoldedStub() { state_.clearHasFoldedStub(); }
++  void setHasFoldedStub() { state_.setHasFoldedStub(); }
++  bool hasFoldedStub() const { return state_.hasFoldedStub(); }
++
+   TrialInliningState trialInliningState() const {
+     return state_.trialInliningState();
+   }
+   void setTrialInliningState(TrialInliningState state) {
+     state_.setTrialInliningState(state);
+   }
+ 
+   void trackNotAttached();
+diff --git a/js/src/jit/CacheIRCompiler.cpp b/js/src/jit/CacheIRCompiler.cpp
+--- a/js/src/jit/CacheIRCompiler.cpp
++++ b/js/src/jit/CacheIRCompiler.cpp
+@@ -1261,16 +1261,41 @@ bool CacheIRWriter::stubDataEquals(const
+       return false;
+     }
+     stubDataWords += sizeof(uint64_t) / sizeof(uintptr_t);
+   }
+ 
+   return true;
+ }
+ 
++bool CacheIRWriter::stubDataEqualsIgnoring(const uint8_t* stubData,
++                                           uint32_t ignoreOffset) const {
++  MOZ_ASSERT(!failed());
++
++  uint32_t offset = 0;
++  for (const StubField& field : stubFields_) {
++    if (offset != ignoreOffset) {
++      if (field.sizeIsWord()) {
++        uintptr_t raw = *reinterpret_cast<const uintptr_t*>(stubData + offset);
++        if (field.asWord() != raw) {
++          return false;
++        }
++      } else {
++        uint64_t raw = *reinterpret_cast<const uint64_t*>(stubData + offset);
++        if (field.asInt64() != raw) {
++          return false;
++        }
++      }
++    }
++    offset += StubField::sizeInBytes(field.type());
++  }
++
++  return true;
++}
++
+ HashNumber CacheIRStubKey::hash(const CacheIRStubKey::Lookup& l) {
+   HashNumber hash = mozilla::HashBytes(l.code, l.length);
+   hash = mozilla::AddToHash(hash, uint32_t(l.kind));
+   hash = mozilla::AddToHash(hash, uint32_t(l.engine));
+   return hash;
+ }
+ 
+ bool CacheIRStubKey::match(const CacheIRStubKey& entry,
+diff --git a/js/src/jit/CacheIRWriter.h b/js/src/jit/CacheIRWriter.h
+--- a/js/src/jit/CacheIRWriter.h
++++ b/js/src/jit/CacheIRWriter.h
+@@ -342,16 +342,18 @@ class MOZ_RAII CacheIRWriter : public JS
+   void trace(JSTracer* trc) override {
+     // For now, assert we only GC before we append stub fields.
+     MOZ_RELEASE_ASSERT(stubFields_.empty());
+   }
+ 
+   size_t stubDataSize() const { return stubDataSize_; }
+   void copyStubData(uint8_t* dest) const;
+   bool stubDataEquals(const uint8_t* stubData) const;
++  bool stubDataEqualsIgnoring(const uint8_t* stubData,
++                              uint32_t ignoreOffset) const;
+ 
+   bool operandIsDead(uint32_t operandId, uint32_t currentInstruction) const {
+     if (operandId >= operandLastUsed_.length()) {
+       return false;
+     }
+     return currentInstruction > operandLastUsed_[operandId];
+   }
+ 
+diff --git a/js/src/jit/ICState.h b/js/src/jit/ICState.h
+--- a/js/src/jit/ICState.h
++++ b/js/src/jit/ICState.h
+@@ -39,16 +39,21 @@ class ICState {
+ 
+   // The TrialInliningState for a Baseline IC.
+   uint8_t trialInliningState_ : 2;
+ 
+   // Whether WarpOracle created a snapshot based on stubs attached to this
+   // Baseline IC.
+   bool usedByTranspiler_ : 1;
+ 
++  // Whether stubs attached to this IC have been folded together into
++  // a single stub. Used as a hint when attaching additional stubs to
++  // try folding them too.
++  bool hasFoldedStub_ : 1;
++
+   // Number of optimized stubs currently attached to this IC.
+   uint8_t numOptimizedStubs_;
+ 
+   // Number of times we failed to attach a stub.
+   uint8_t numFailures_;
+ 
+   static const size_t MaxOptimizedStubs = 6;
+ 
+@@ -118,16 +123,17 @@ class ICState {
+     setMode(Mode::Specialized);
+ #ifdef DEBUG
+     if (JitOptions.forceMegamorphicICs) {
+       setMode(Mode::Megamorphic);
+     }
+ #endif
+     trialInliningState_ = uint32_t(TrialInliningState::Initial);
+     usedByTranspiler_ = false;
++    hasFoldedStub_ = false;
+     numOptimizedStubs_ = 0;
+     numFailures_ = 0;
+   }
+   void trackAttached() {
+     // We'd like to assert numOptimizedStubs_ < MaxOptimizedStubs, but
+     // since this code is also used for non-CacheIR Baseline stubs, assert
+     // < 16 for now. Note that we do have the stronger assert in other
+     // methods, because they are only used by CacheIR ICs.
+@@ -150,16 +156,20 @@ class ICState {
+     numOptimizedStubs_--;
+   }
+   void trackUnlinkedAllStubs() { numOptimizedStubs_ = 0; }
+ 
+   void clearUsedByTranspiler() { usedByTranspiler_ = false; }
+   void setUsedByTranspiler() { usedByTranspiler_ = true; }
+   bool usedByTranspiler() const { return usedByTranspiler_; }
+ 
++  void clearHasFoldedStub() { hasFoldedStub_ = false; }
++  void setHasFoldedStub() { hasFoldedStub_ = true; }
++  bool hasFoldedStub() const { return hasFoldedStub_; }
++
+   TrialInliningState trialInliningState() const {
+     return TrialInliningState(trialInliningState_);
+   }
+   void setTrialInliningState(TrialInliningState state) {
+ #ifdef DEBUG
+     // Moving to the Failure state is always valid. The other states should
+     // happen in this order:
+     //
+diff --git a/js/src/jit/JitScript.cpp b/js/src/jit/JitScript.cpp
+--- a/js/src/jit/JitScript.cpp
++++ b/js/src/jit/JitScript.cpp
+@@ -397,16 +397,18 @@ void ICScript::purgeOptimizedStubs(Zone*
+                                                stub->toCacheIRStub());
+         stub = stub->toCacheIRStub()->next();
+         continue;
+       }
+ 
+       prev = stub->toCacheIRStub();
+       stub = stub->toCacheIRStub()->next();
+     }
++
++    lastStub->toFallbackStub()->clearHasFoldedStub();
+   }
+ 
+ #ifdef DEBUG
+   // All remaining stubs must be allocated in the fallback space.
+   for (size_t i = 0; i < numICEntries(); i++) {
+     ICEntry& entry = icEntry(i);
+     ICStub* stub = entry.firstStub();
+     while (!stub->isFallback()) {
