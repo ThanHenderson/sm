@@ -33,8 +33,8 @@ SPEW=CacheIRHealthReport ./mach raptor --browsertime --page-cycles 1 --post-star
 NoSpew
 - SPEW=''
 
-### Spew
+Spew
 - SPEW=CacheIRHealthReport with unaltered changeset
 
-### SpewNoTrialInline
+SpewNoTrialInline
 - Removed #ifdef block from js/src/jit/TrialInlining.cpp
