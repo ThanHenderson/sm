@@ -28,7 +28,7 @@ mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-optdebug-browser-gecko-@CONFIG_GUESS@
 mk_add_options AUTOCLOBBER=1
 ```
 ```
-hg up FIREFOX_BETA_100_BASE
+hg up FIREFOX_RELEASE_100_BASE
 ./mach build
 ```
 

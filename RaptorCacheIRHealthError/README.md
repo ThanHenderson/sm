@@ -1,7 +1,7 @@
 # Web driver failure when using CacheIRHealthReport
 
 ### Changeset
-changeset: FIREFOX_BETA_100_BASE
+changeset: FIREFOX_RELEASE_100_BASE
 
 ### Mozconfig
 ```
