@@ -1,13 +1,15 @@
 const { Builder, By, Key, until } = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 
-// For Matt: Set geckodriver.
-const serviceBuilder = new firefox.ServiceBuilder('/Users/than/Development/sm/mozilla-unified/obj-optdebug-browser-gecko-aarch64-apple-darwin21.5.0/dist/bin/geckodriver');
+const objPath = '/Users/than/Development/sm/mozilla-unified/obj-optdebug-browser-gecko-aarch64-apple-darwin21.5.0'
+const builder = objPath + '/dist/bin/geckodriver';
+const binary = objPath + '/dist/NightlyDebug.app/Contents/MacOS/firefox';
 
+const serviceBuilder = new firefox.ServiceBuilder(builder);
 let options = new firefox.Options();
-// For Matt: Set browser binary.
-options.setBinary('/Users/than/Development/sm/mozilla-unified/obj-optdebug-browser-gecko-aarch64-apple-darwin21.5.0/dist/NightlyDebug.app/Contents/MacOS/firefox');
+options.setBinary(binary);
 options.addArguments('--headless');
+
 (async function() {
  let driver = await new Builder()
     .forBrowser('firefox')
@@ -35,4 +37,3 @@ options.addArguments('--headless');
   }
 
 })();
- 

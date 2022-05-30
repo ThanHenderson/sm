@@ -10,6 +10,6 @@ CURR_PATH=`pwd`
 PATH_TO_MOZ="/Users/than/Development/sm/mozilla-unified"
 
 cd $PATH_TO_MOZ
-hg up FIREFOX_BETA_100_BASE
+hg up FIREFOX_RELEASE_100_BASE
 ./mach build
 cd $CURR_PATH
