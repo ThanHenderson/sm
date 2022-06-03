@@ -1,13 +1,20 @@
 # Firefox Webdriver
 
+### Setup
 ```sh
 npm i selenium-webdriver
 ```
 
+### Usage
 ```sh
-./run.sh <benchmark>
+./run.sh <benchmark> <testname> [runner]
 ```
-where benchmark is either *speedometer* or *jetstream*
+where 
+- `benchmark` is either *speedometer* or *jetstream*
+- `testname` is the name of the test (specific to each benchmark)
+  - to run the default test suite, use `default`
+  <!-- - to run all tests, individually, use `all` -->
+- `runner` is either *browser* or *cli* (only for jetstream, defaults to *browser*)
 
 ### mozilla-unified Build
 MOZCONFIG

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "THIS SCRIPT IS DEPRECATED. USE run.sh instead."
 echo "Running jetstream benchmarks."
 timestamp=$(date +"%Y%m%d%H%M%S")
 collection_name="jetstream.$1.$timestamp"
