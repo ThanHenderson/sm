@@ -1638,8 +1638,8 @@ let runCodeLoad = true;
 let runWasm = true;
 if (typeof WebAssembly === "undefined")
     runWasm = false;
-// modification: run only single test
 
+// modification: run only single test
 let defaultRun = false;
 
 function getTests() {

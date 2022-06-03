@@ -22,6 +22,6 @@ BASE_URL
 ### .env.local variables
 
 ```
-JETSTRAM_RUN_SH
-JETSTRAM_RUN_WD
+RUN_SH: path to run.sh
+RUN_WD: path to the directory where run.sh is located
 ```

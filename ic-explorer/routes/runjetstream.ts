@@ -21,11 +21,11 @@ const runjetstream = createRouter()
     output,
     async resolve({ input: i }) {
       if (
-        !process.env.JETSTREAM_RUN_SH || !process.env.JETSTREAM_RUN_WD
+        !process.env.RUN_SH || !process.env.RUN_WD
       ) {
-        throw new Error('JETSTREAM_RUN_SH and JETSTREAM_RUN_WD must be defined in the environment');
+        throw new Error('RUN_SH and RUN_WD must be defined in the environment');
       }
-      const { stdout, stderr } = await exec(`${process.env.JETSTREAM_RUN_SH} ${i.name}`, { cwd: process.env.JETSTREAM_RUN_WD });
+      const { stdout, stderr } = await exec(`${process.env.RUN_SH} jetstream ${i.name}`, { cwd: process.env.RUN_WD });
       return {
         output: stdout,
         error: stderr,
