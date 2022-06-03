@@ -173,8 +173,9 @@ const fileLoader = (function() {
         }
 
         async _loadInternal(url) {
+            // console.log(url)
             if (!isInBrowser)
-                return Promise.resolve(readFile(url));
+                return Promise.resolve(read(url));
 
             let fetchResponse = await fetch(new Request(url));
             if (url.indexOf(".js") !== -1)
@@ -284,27 +285,19 @@ class Driver {
     {
         if (!isInBrowser) {
             let scripts = string;
-            let globalObject;
-            let realm;
-            if (isD8) {
-                realm = Realm.createAllowCrossRealmAccess();
-                globalObject = Realm.global(realm);
-                globalObject.loadString = function(s) {
-                    return Realm.eval(realm, s);
-                };
-                globalObject.readFile = read;
-            } else
-                globalObject = runString("");
 
-            globalObject.console = {log:globalObject.print}
-            globalObject.top = {
+            console = {log:print}
+            let top = {
                 currentResolve,
                 currentReject
             };
-            for (let script of scripts)
-                globalObject.loadString(script);
 
-            return isD8 ? realm : globalObject;
+            try {
+                eval(scripts.join('\n'))
+            } catch (e) {
+                print(e)
+            }
+            return {};
         }
 
         var magic = document.getElementById("magic");
@@ -1646,7 +1639,7 @@ let runWasm = true;
 if (typeof WebAssembly === "undefined")
     runWasm = false;
 
-if (false) {
+if (true) {
     runOctane = false;
     runARES = false;
     runWSL = false;
@@ -1660,6 +1653,7 @@ if (false) {
     runCodeLoad = false;
     runWasm = false;
 }
+
 
 if (typeof testList !== "undefined") {
     processTestList(testList);
@@ -1700,3 +1694,23 @@ if (typeof testList !== "undefined") {
     if (runWTB)
         addTestsByGroup(WTBGroup);
 }
+
+
+// modification: list of tests to run
+// console.log(testPlans.map(plan => plan.name));
+
+// modification: run only single test
+function getTests() {
+    let testType;
+    if (isInBrowser) {
+        testType = window.prompt("testType")
+    } else if (scriptArgs[0] !== undefined) {
+        testType = scriptArgs[0]
+    } else {
+        console.log("error: need test type")
+        return
+    }
+    addTestByName(testType)
+}
+
+getTests()
