@@ -25,16 +25,15 @@ options.setBinary(binary);
         await driver.wait(until.elementLocated(By.tagName('pre')));
         break;
       case 'jetstream':
-        const testName = process.argv[3];
+        let testName = process.argv[3];
         if (!testName) {
-          console.log('running all jetstream tests');
-          await driver.get('https://browserbench.org/JetStream/');
-        } else {
-          console.log('running jetstream test: ' + testName);
-          await driver.get(`file://${jetStreamPath}/index.html`);
-          await driver.switchTo().alert().sendKeys(testName);
-          await driver.switchTo().alert().accept();
-        }
+          testName = 'default';
+        } 
+
+        console.log('running jetstream test: ' + testName);
+        await driver.get(`file://${jetStreamPath}/index.html`);
+        await driver.switchTo().alert().sendKeys(testName);
+        await driver.switchTo().alert().accept();
         await driver.wait(until.elementLocated(By.linkText('Start Test')));
         await driver.findElement(By.linkText('Start Test')).click();
         await driver.wait(until.elementLocated(By.className('done')));

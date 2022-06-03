@@ -1638,8 +1638,32 @@ let runCodeLoad = true;
 let runWasm = true;
 if (typeof WebAssembly === "undefined")
     runWasm = false;
+// modification: run only single test
 
-if (true) {
+let defaultRun = false;
+
+function getTests() {
+    let testType;
+    if (isInBrowser) {
+        testType = window.prompt("testType")
+    } else if (scriptArgs[0] !== undefined) {
+        testType = scriptArgs[0]
+    } else {
+        console.log("error: need test type")
+        return
+    }
+
+    if (testType === "default") {
+        defaultRun = true;
+    } else {
+        addTestByName(testType) 
+    }
+}
+
+getTests()
+
+
+if (!defaultRun) {
     runOctane = false;
     runARES = false;
     runWSL = false;
@@ -1699,18 +1723,3 @@ if (typeof testList !== "undefined") {
 // modification: list of tests to run
 // console.log(testPlans.map(plan => plan.name));
 
-// modification: run only single test
-function getTests() {
-    let testType;
-    if (isInBrowser) {
-        testType = window.prompt("testType")
-    } else if (scriptArgs[0] !== undefined) {
-        testType = scriptArgs[0]
-    } else {
-        console.log("error: need test type")
-        return
-    }
-    addTestByName(testType)
-}
-
-getTests()
