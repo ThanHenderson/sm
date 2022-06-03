@@ -33,7 +33,7 @@ const JetStreamTest: NextPage = () => {
   const { data, isLoading, isSuccess } = trpc.useQuery(['gettestruns', { jetstreamTest: test }]);
 
   const { data: dataGraph, isLoading: isLoadingGraph } = trpc.useQuery(['jetstreamstats',
-    { name: test, timestamp: selected || 'latest' }], { staleTime: Infinity });
+    { name: test, timestamp: selected || 'latest' }], { staleTime: Infinity, keepPreviousData: true });
 
   return (
     <SimpleLayout active="JetStream">
