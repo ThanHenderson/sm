@@ -15,9 +15,9 @@ const formShape = z.object({
 
 type FormShape = z.infer<typeof formShape>;
 
-interface FormProps {
+type FormProps = {
   onRun: (data: FormShape) => void;
-}
+};
 
 const FormItem: NextPage<FormProps> = ({ onRun }) => {
   const {
@@ -34,7 +34,6 @@ const FormItem: NextPage<FormProps> = ({ onRun }) => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Row lg={4}>
-
         <Form.Group>
           <Form.Label>Test name</Form.Label>
           <Form.Select {...register('name', { required: 'Type of test must be selected' })} isInvalid={!!errors.name} defaultValue="default">
@@ -46,9 +45,7 @@ const FormItem: NextPage<FormProps> = ({ onRun }) => {
           {errors.name && <Form.Control.Feedback type="invalid">{errors.name.message}</Form.Control.Feedback>}
         </Form.Group>
       </Row>
-
       <Row>
-
         <Form.Group>
           <Button variant="primary" type="submit">
             Run
@@ -63,7 +60,7 @@ const FormItem: NextPage<FormProps> = ({ onRun }) => {
   );
 };
 
-const Run: NextPage = () => {
+export default () => {
   const [show, setShow] = React.useState(false);
   const [testName, setTestName] = React.useState<z.infer<typeof testNames>>();
 
@@ -86,5 +83,3 @@ const Run: NextPage = () => {
     </SimpleLayout>
   );
 };
-
-export default Run;

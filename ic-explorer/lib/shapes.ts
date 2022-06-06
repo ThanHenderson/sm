@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import getEnumError from './getEnumError';
+import getEnumError from '../utils/getenumerror';
 
-const testNames = z.enum([
+export const testNames = z.enum([
   'default',
   'Air',
   'Basic',
@@ -72,6 +72,29 @@ const testNames = z.enum([
   'prepack-wtb',
   'uglify-js-wtb',
 ], { errorMap: getEnumError('Invalid test name') });
-const sample = 'ML';
+export const sample = 'ML';
 
-export { testNames, sample };
+export type CountOfOperations = {
+  _id: string;
+  count: number;
+};
+
+export type CountOfCacheIR = {
+  _id: string;
+  count: number;
+};
+
+export const countOfCacheIRTimeseries = z.object({
+  group: z.number(),
+  count0: z.number(),
+  count1: z.number(),
+  count2: z.number(),
+});
+
+export const timestampEntry = z.object({
+  name: z.string(),
+  timestamp: z.string(),
+});
+
+export type CountOfCacheIRTimeseries = z.infer<typeof countOfCacheIRTimeseries>;
+export type TimestampEntry = z.infer<typeof timestampEntry>;

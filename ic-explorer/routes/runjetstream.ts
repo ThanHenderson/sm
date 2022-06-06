@@ -15,7 +15,7 @@ const output = z.object({
   error: z.string(),
 });
 
-const runjetstream = createRouter()
+export default createRouter()
   .mutation('runjetstream', {
     input,
     output,
@@ -33,6 +33,3 @@ const runjetstream = createRouter()
     },
 
   });
-
-export default runjetstream;
-export { input };

@@ -20,10 +20,8 @@ const JetStreamTest: NextPage = () => {
 
   if (!testNames.safeParse(test).success) return <p>Error: test name does not exist</p>;
 
-  const isSelected = (name: string) => selected === name;
-
   const toggleSelected = (name: string) => {
-    if (isSelected(name)) {
+    if (selected === name) {
       setSelected(null);
     } else {
       setSelected(name);
@@ -65,7 +63,7 @@ const JetStreamTest: NextPage = () => {
               <ListGroup.Item
                 key={name}
                 action
-                active={isSelected(name)}
+                active={selected === name}
                 onClick={() => toggleSelected(name)}
               >
                 {name}

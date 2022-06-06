@@ -1,13 +1,15 @@
 {
   "extends": ["next/core-web-vitals", "airbnb", "airbnb-typescript"],
   "rules": {
-    "react/function-component-definition": [2, { "namedComponents": "arrow-function" }],
+    "react/function-component-definition": [2, { 
+      "namedComponents": "arrow-function",
+      "unnamedComponents": "arrow-function"
+      }],
     "react/prop-types": 0,
     "prefer-arrow-callback": "error",
     "func-style": ["error", "expression"]
   },
   "parserOptions": {
-    "project": "./ic-explorer/tsconfig.json"
+    "project": "./tsconfig.json"
   }
-  // "rules": {"semi": ["error", "never"]}
 }
